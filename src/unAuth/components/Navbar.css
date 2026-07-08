@@ -8,8 +8,15 @@
 }
 
 .navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.navbar-logo-icon {
+  color: #667eea;
 }
 
 .navbar-links {
@@ -20,4 +27,20 @@
 
 .navbar-links li {
   cursor: pointer;
+}
+
+.nav-cta-btn {
+  background: #667eea;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nav-cta-btn:hover {
+  background: #5a6fd6;
 }
