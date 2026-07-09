@@ -9,11 +9,7 @@ const Navbar = () => {
         <MonitorPlay className="navbar-logo-icon" size={28} />
         MyApp
       </div>
-      <ul className="navbar-links">
-        <li><button className="nav-cta-btn">AI Video ChatBot →</button></li>
-        <li>About</li>
-        <li>Contact</li>
-      </ul>
+      <button className="nav-cta-btn">AI Video ChatBot →</button>
     </nav>
   )
 }

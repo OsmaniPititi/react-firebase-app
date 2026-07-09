@@ -10,11 +10,8 @@ const LandinPage = () => {
     <div className="landing-page">
       <Navbar />
       <main className="landing-main">
-        <div className="landing-hero">
-          <h1 className="landing-title">hello landing page</h1>
-        </div>
+        <Timestamp />        
         <Bumpups />
-        <Timestamp />
       </main>
       <Footer />
     </div>

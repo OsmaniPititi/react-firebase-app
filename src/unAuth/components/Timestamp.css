@@ -1,7 +1,78 @@
-.timestamp {
+.timestamp-container {
   padding: 1rem;
-  background: #e0e0e0;
+  margin: 1rem;
   text-align: center;
-  font-size: 0.9rem;
-  color: #555;
+  background: #0a0a0a;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.timestamp-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  color: #F8F9FA;
+}
+
+.timestamp-subtitle {
+  font-size: 0.75rem;
+  color: #ADB5BD;
+  margin: 0 auto 1.5rem;
+  line-height: 1.5;
+}
+
+.timestamp-subtitle a {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+.input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.url-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.25rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.url-input:focus {
+  border-color: #667eea;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  pointer-events: none;
+}
+
+.generate-button {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.generate-button:hover {
+  background: #555;
 }

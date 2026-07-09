@@ -2,9 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: #333;
+  padding: 1rem;
+  margin: 1rem;
+  background: #0a0a0a;
   color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .navbar-logo {
@@ -18,23 +21,12 @@
 .navbar-logo-icon {
   color: #667eea;
 }
-
-.navbar-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-}
-
-.navbar-links li {
-  cursor: pointer;
-}
-
 .nav-cta-btn {
-  background: #667eea;
+  background: #333;
   color: #fff;
   border: none;
-  border-radius: 999px;
-  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
