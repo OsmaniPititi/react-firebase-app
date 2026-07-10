@@ -1,5 +1,100 @@
 .bumpups {
-  padding: 2rem;
+  padding: 2rem 1rem;
   background: transparent;
-  text-align: center;
+  margin-top: 2rem;
+  border-top-style: dashed;
+  border-top-color: aliceblue;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.bompops-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bompops-title {
+  text-align: left;
+  color: var(--text-h);
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.bompops-subtitle {
+  text-align: left;
+  color: var(--text-h);
+  font-size: 20px;
+  margin-bottom: 2rem;
+}
+
+.bompops-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.bompops-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &.dark-bg {
+    background-color: #1e1e1e;
+  }
+  &.black-bg {
+    background-color: #0b0b0b;
+  }  
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.bompops-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-badge {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.card-btn:hover {
+  background: var(--accent-bg);
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .bompops-grid {
+    grid-template-columns: 1fr;
+  }
 }
