@@ -1,4 +1,3 @@
-import React from 'react'
 import { UploadSimple, Chats, VideoCamera, Code, ArrowRight } from 'phosphor-react'
 import './Bumpups.css'
 
@@ -24,7 +23,10 @@ const Bumpups = () => {
               <div className="card-left">
                 <span className="card-badge">{card.badge}</span>
                 <button className="card-btn">
-                  <ArrowRight size={16} weight="bold" /> Learn more
+                  <span className="icon-circle">
+                    <ArrowRight size={14} weight="bold" />
+                  </span>  
+                  Learn more
                 </button>
               </div>
               <div className="card-right">

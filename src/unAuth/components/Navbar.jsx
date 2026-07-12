@@ -1,4 +1,3 @@
-import React from 'react'
 import { MonitorPlay } from 'phosphor-react'
 import './Navbar.css'
 

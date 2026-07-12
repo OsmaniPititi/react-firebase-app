@@ -61,24 +61,49 @@
 }
 
 .card-badge {
+  display: inline-block;
+  background-color: rgba(46, 213, 161, 0.2);
+  color: #2ed5a1;
+  padding: 4px 12px;
+  border-radius: 6px;
   font-size: 16px;
   font-weight: 600;
-  color: var(--text);
+  border: 1px solid rgba(46, 213, 161, 0.3);
+  backdrop-filter: blur(4px);
+  margin-bottom: 12px;
 }
 
 .card-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.4rem 1rem;
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 500;
+  border: none; /*1px solid var(--border);*/
+  color: #ffffff; /*var(--accent);*/
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  padding: 0;
+  /*border-radius: 8px;
+  font-weight: 500;
+  transition: background 0.2s ease;*/
+}
+
+.icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #0b0b0b;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.card-btn:hover .icon-circle {
+  transform: translateX(3px) scale(1.1);
+  background-color: var(--accent-bg);
+  color: #2ed5a1;
 }
 
 .card-btn:hover {
