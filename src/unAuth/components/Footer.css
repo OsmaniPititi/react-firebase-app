@@ -2,8 +2,11 @@
   padding: 1rem;
   margin: 1rem;
   background: #0a0a0a;
-  color: #ccc;
+  color: #cbc0c0;
   text-align: center;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.footer p {
+  color: #cbc0c0;
 }

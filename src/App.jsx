@@ -1,8 +1,7 @@
-import LandinPage from './unAuth/LandinPage.jsx'
-import './App.css'
+import LandingPage from './unAuth/LandingPage.jsx'
 
 function App() {
-  return <LandinPage />
+  return <LandingPage />
 }
 
 export default App
