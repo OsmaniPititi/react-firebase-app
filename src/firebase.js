@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,5 +21,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+const functions = getFunctions(app);
+//Connect local emulator only for localhost
+if (window.location.hostname === "localhost") {
+  connectFunctionsEmulator(functions,"localhost", 5001);
+}
 
-export { db, auth, googleProvider };
+export { db, auth, googleProvider, app, functions };

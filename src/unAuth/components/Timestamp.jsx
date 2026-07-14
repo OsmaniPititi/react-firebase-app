@@ -109,6 +109,8 @@ const Timestamp = () => {
           <Link size={18} className="input-icon" />
           <input
             type="text"
+            id="youtube-url"
+            name="youtube-url"
             placeholder="Enter YouTube video URL"
             className="url-input"
             value={url}
