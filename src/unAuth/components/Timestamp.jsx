@@ -1,10 +1,14 @@
-import { useState } from 'react'
-import { Link } from 'phosphor-react'
+import { useState, useEffect } from 'react'
+import { Link, ClockCounterClockwise, Scissors } from 'phosphor-react'
+import { httpsCallable } from 'firebase/functions'
+import { functions } from '../../firebase'
 import './Timestamp.css'
 
 const YOUTUBE_URL_REGEX = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/)[\w-]+/
 
 const YOUTUBE_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY
+
+const HISTORY_KEY = 'timestampHistory'
 
 function extractVideoId(url) {
   const patterns = [
@@ -20,27 +24,82 @@ function extractVideoId(url) {
   return null
 }
 
+const generateTimestamps = httpsCallable(functions, 'generateTimestamps')
+
+function parseHistory(raw) {
+  try {
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter(
+      (item) =>
+        item &&
+        typeof item.url === 'string' &&
+        typeof item.title === 'string' &&
+        typeof item.thumbnail === 'string' &&
+        Array.isArray(item.timestampsList) &&
+        typeof item.timestampsString === 'string'
+    )
+  } catch {
+    return []
+  }
+}
+
 const Timestamp = () => {
   const [url, setUrl] = useState('')
   const [error, setError] = useState('')
   const [videoData, setVideoData] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [timestampsList, setTimestampsList] = useState([])
+  const [timestampsString, setTimestampsString] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [history, setHistory] = useState(() => parseHistory(localStorage.getItem(HISTORY_KEY)))
+
+  const isUrlInvalid = url.length > 0 && !YOUTUBE_URL_REGEX.test(url)
 
   const handleChange = (e) => {
     setUrl(e.target.value)
     setError('')
-    setVideoData(null)
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(timestampsString)
+    setCopied(true)
+  }
+
+  useEffect(() => {
+    if (!copied) return
+    const id = setTimeout(() => setCopied(false), 2000)
+    return () => clearTimeout(id)
+  }, [copied])
+
+  const saveHistory = (newHistory) => {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory))
+    setHistory(newHistory)
+  }
+
+  const addToHistory = (item) => {
+    const filtered = history.filter((h) => h.url !== item.url)
+    const updated = [item, ...filtered].slice(0, 20)
+    saveHistory(updated)
+  }
+
+  const clearHistory = () => {
+    saveHistory([])
+  }
+
+  const loadFromHistory = (item) => {
+    setUrl(item.url)
+    setVideoData({ title: item.title, thumbnail: item.thumbnail })
+    setTimestampsList(item.timestampsList)
+    setTimestampsString(item.timestampsString)
+    setError('')
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setVideoData(null)
-
-    if (!YOUTUBE_URL_REGEX.test(url)) {
-      setError('Please enter a valid YouTube URL')
-      return
-    }
-    setError('')
+    setTimestampsList([])
+    setTimestampsString('')
 
     if (!YOUTUBE_API_KEY) {
       console.error('VITE_YOUTUBE_API_KEY is missing. Please configure your .env file.')
@@ -87,6 +146,31 @@ const Timestamp = () => {
         title: snippet.title,
         thumbnail,
       })
+
+      try {
+        const result = await generateTimestamps({ videoId, url })
+
+        const list = result.data?.timestamps_list
+        const str = result.data?.timestamps_string
+        if (!Array.isArray(list) || typeof str !== 'string') {
+          setError('Invalid response from server.')
+          setLoading(false)
+          return
+        }
+
+        setTimestampsList(list)
+        setTimestampsString(str)
+        addToHistory({
+          url,
+          title: snippet.title,
+          thumbnail,
+          timestampsList: list,
+          timestampsString: str,
+        })
+      } catch (fnErr) {
+        console.error('Cloud Function error:', fnErr)
+        setError(fnErr.message || 'Failed to generate timestamps. Please try again.')
+      }
     } catch (err) {
       console.error('Fetch error:', err)
       setError('Failed to fetch video data. Please try again.')
@@ -118,8 +202,17 @@ const Timestamp = () => {
           />
         </div>
 
-        <button type="submit" className="generate-button" disabled={loading}>
-          {loading ? 'Loading...' : 'Generate'}
+        <button
+          type="submit"
+          className={`generate-button ${isUrlInvalid ? 'generate-button--invalid' : ''}`}
+          disabled={loading || isUrlInvalid}
+        >
+          {loading ? (
+            <>
+              <Scissors size={16} className="icon-scissors-animating" />
+              {' '}Generating...
+            </>
+          ) : isUrlInvalid ? 'Invalid Youtube URL' : 'Generate'}
         </button>
       </form>
       {error && <p className="error-text">{error}</p>}
@@ -132,6 +225,78 @@ const Timestamp = () => {
             alt={videoData.title}
           />
           <h3 className="video-title">{videoData.title}</h3>
+        </div>
+      )}
+
+      {timestampsList.length > 0 && (
+        <div className="timestamps-result">
+          <h4 className="timestamps-heading">Generated Timestamps</h4>
+
+          <ul className="timestamps-list">
+            {timestampsList.map((ts, i) => {
+              if (typeof ts !== 'string') return null
+              const dashIndex = ts.indexOf(' - ')
+              const time = dashIndex !== -1 ? ts.slice(0, dashIndex) : ''
+              const desc = dashIndex !== -1 ? ts.slice(dashIndex + 3) : ts
+              return (
+                <li key={i} className="timestamp-item">
+                  <span className="timestamp-time">{time}</span>
+                  <span className="timestamp-desc">{desc}</span>
+                </li>
+              )
+            })}
+          </ul>
+
+          <div className="copy-section">
+            <textarea
+              className="timestamps-textarea"
+              readOnly
+              value={timestampsString}
+              rows={timestampsList.length}
+            />
+            <button
+              type="button"
+              className="copy-button"
+              onClick={handleCopy}
+            >
+              {copied ? 'Copied!' : 'Copy to clipboard'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {history.length > 0 && (
+        <div className="history-panel">
+          <div className="history-header">
+            <ClockCounterClockwise size={18} className="history-icon" />
+            <h4 className="history-title">History</h4>
+            <button
+              type="button"
+              className="history-clear"
+              onClick={clearHistory}
+            >
+              Clear
+            </button>
+          </div>
+          <ul className="history-list">
+            {history.map((item) => (
+              <li key={item.url} className="history-item">
+                <img
+                  className="history-thumbnail"
+                  src={item.thumbnail}
+                  alt={item.title}
+                />
+                <span className="history-item-title">{item.title}</span>
+                <button
+                  type="button"
+                  className="history-view-btn"
+                  onClick={() => loadFromHistory(item)}
+                >
+                  View Timestamps
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

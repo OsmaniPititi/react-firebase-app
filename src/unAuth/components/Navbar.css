@@ -22,7 +22,7 @@
   color: #667eea;
 }
 .nav-cta-btn {
-  background: #333;
+  background: #667eea;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -34,5 +34,5 @@
 }
 
 .nav-cta-btn:hover {
-  background: #5a6fd6;
+  background: #4c51bf;
 }
